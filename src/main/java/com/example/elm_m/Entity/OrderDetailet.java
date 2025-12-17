@@ -1,0 +1,18 @@
+package com.example.elm_m.Entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class OrderDetailet {
+    // 订单明细 id（主键）
+    private Long odId;
+    private Long orderId;
+    private Long foodId;
+    private Integer quantity;
+}
