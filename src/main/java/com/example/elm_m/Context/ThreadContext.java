@@ -1,13 +1,13 @@
 package com.example.elm_m.Context;
 
 public class ThreadContext {
-    public static ThreadLocal<Long> threadLocal = new ThreadLocal<>();
+    public static ThreadLocal<String> threadLocal = new ThreadLocal<>();
 
-    public static void setCurrentId(Long id) {
+    public static void setCurrentId(String id) {
         threadLocal.set(id);
     }
 
-    public static Long getCurrentId() {
+    public static String getCurrentId() {
         return threadLocal.get();
     }
 

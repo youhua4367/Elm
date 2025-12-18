@@ -12,15 +12,11 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Schema(description = "用户登录响应对象")
-public class UserLoginVO implements Serializable {
-
-    @Schema(description = "用户id", example = "1123324")
+@Schema(description = "用户信息响应对象")
+public class UserVO implements Serializable {
     private String userId;
-
-    @Schema(description = "用户姓名", example = "张三")
     private String userName;
+    private Integer userSex;
+    private String userImg;
 
-    @Schema(description = "jwt令牌")
-    private String token;
 }

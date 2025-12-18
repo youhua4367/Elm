@@ -2,15 +2,20 @@ package com.example.elm_m.Service.Impl;
 
 import com.example.elm_m.Constant.MessageConstant;
 import com.example.elm_m.Constant.StatusConstant;
+import com.example.elm_m.Context.ThreadContext;
+import com.example.elm_m.DTO.PasswordDTO;
+import com.example.elm_m.DTO.UserRegisterDTO;
 import com.example.elm_m.DTO.UserLoginDTO;
+import com.example.elm_m.DTO.UserUpdateDTO;
 import com.example.elm_m.Entity.User;
-import com.example.elm_m.Exception.AccountLockedException;
-import com.example.elm_m.Exception.AccountNotFoundException;
-import com.example.elm_m.Exception.PasswordErrorException;
+import com.example.elm_m.Exception.*;
 import com.example.elm_m.Mapper.UserMapper;
 import com.example.elm_m.Service.UserService;
+import com.example.elm_m.VO.UserVO;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 @Service
@@ -52,5 +57,106 @@ public class UserServiceImpl implements UserService {
 
         // 返回实体对象
         return user;
+    }
+
+    /**
+     * 用户注册
+     * @param userRegisterDTO 注册提交对象
+     */
+    @Override
+    @Transactional
+    public void register(UserRegisterDTO userRegisterDTO) {
+
+        // 不能为空
+        if (userRegisterDTO == null) {
+            try {
+                throw new IllegalAccessException("参数不能为空");
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        String userId = userRegisterDTO.getUserId();
+        String password = userRegisterDTO.getPassword();
+        String rePassword = userRegisterDTO.getRePassword();
+
+        // 判断密码是否满足要求（）
+        if (userId.isEmpty() || password.isEmpty() || rePassword.isEmpty()) {
+            throw new ParamException(MessageConstant.PARAM_ERROR);
+        }
+        // 判断用户 ID 是否已存在
+        User user = userMapper.getByUserId(userId);
+        if (user != null) {
+            throw new AccountHasExistedException(MessageConstant.ACCOUNT_HAS_EXIST);
+        }
+        // 判断两次密码是否相同
+        if (!password.equals(rePassword)) {
+            throw new PasswordNotSameException(MessageConstant.PASSWORD_NOT_SAME);
+        }
+
+        User user1 = new User();
+        BeanUtils.copyProperties(userRegisterDTO, user1);
+
+        // 密码加密
+        user1.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
+        user1.setDelTag(StatusConstant.ENABLED);
+        user1.setUserImg(MessageConstant.DEFAULT_IMG);
+
+        userMapper.insert(user1);
+    }
+
+    @Override
+    public UserVO getUserInfo(String userId) {
+        User user = userMapper.getByUserId(userId);
+
+        return UserVO.builder()
+                .userId(userId)
+                .userName(user.getUserName())
+                .userImg(user.getUserImg())
+                .userSex(user.getUserSex())
+                .build();
+    }
+
+    /**
+     * 修改用户的信息
+     * @param userUpdateDTO
+     */
+    @Override
+    public void update(String userId, UserUpdateDTO userUpdateDTO) {
+        User user = new User();
+        BeanUtils.copyProperties(userUpdateDTO, user);
+        user.setUserId(userId);
+
+        userMapper.update(user);
+
+    }
+
+    @Override
+    public void updatePassword(String userId, PasswordDTO passwordDTO) {
+        String password = passwordDTO.getPassword();
+        String newPassword = passwordDTO.getNewPassword();
+        String reNewPassword = passwordDTO.getReNewPassword();
+
+        User user = userMapper.getByUserId(userId);
+        String oldPassword = user.getPassword();
+
+        password = DigestUtils.md5DigestAsHex(password.getBytes());
+        // 判断旧密码是否正确
+        if (!oldPassword.equals(password)) {
+            throw new PasswordErrorException(MessageConstant.PASSWORD_ERROR);
+        }
+
+        // 判断两次新密码是否相同
+        if (!newPassword.equals(reNewPassword)) {
+            throw new PasswordNotSameException(MessageConstant.PASSWORD_NOT_SAME);
+        }
+
+        // 新密码加密后存入数据库
+        newPassword = DigestUtils.md5DigestAsHex(newPassword.getBytes());
+        User user1 = new User();
+        user1.setUserId(userId);
+        user1.setPassword(newPassword);
+        userMapper.update(user1);
+
     }
 }
