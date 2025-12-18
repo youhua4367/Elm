@@ -21,10 +21,12 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(jwtTokenInterceptor)
                 .addPathPatterns("/user/**")
                 .excludePathPatterns(
-                        "/user/login",
-                        "/user/register",
+                        "/user/user/login",
+                        "/user/user/register",
                         "/swagger-ui/**",
-                        "/v3/api-docs/**"
+                        "/v3/api-docs/**",
+                        "/user/business/**",
+                        "/user/category/**"
                 );
     }
 }

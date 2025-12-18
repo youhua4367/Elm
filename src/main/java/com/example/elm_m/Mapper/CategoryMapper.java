@@ -1,14 +1,13 @@
 package com.example.elm_m.Mapper;
 
-import com.example.elm_m.Entity.Business;
+import com.example.elm_m.Entity.Category;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
 @Mapper
-public interface BusinessMapper {
-
-    @Select("select * from business")
-    List<Business> getBusinessList();
+public interface CategoryMapper {
+    @Select("select * from category")
+    List<Category> getCategoryList();
 }

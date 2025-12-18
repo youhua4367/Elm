@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderDetailet {
+public class OrderDetail implements Serializable {
     // 订单明细 id（主键）
     private Long odId;
     private Long orderId;

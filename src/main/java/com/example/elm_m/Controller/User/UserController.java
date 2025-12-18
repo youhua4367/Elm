@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/user/user")
 @Slf4j
 @Tag(name = "用户管理", description = "用户管理相关接口")
 public class UserController {

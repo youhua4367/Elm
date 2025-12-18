@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class DeliveryAddress {
+public class DeliveryAddress implements Serializable {
     private Long daId;
     // 联系人姓名
     private String contactName;
