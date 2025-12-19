@@ -1,5 +1,6 @@
 package com.example.elm_m.Service.Impl;
 
+import com.example.elm_m.Entity.Cart;
 import com.example.elm_m.Entity.Category;
 import com.example.elm_m.Mapper.CategoryMapper;
 import com.example.elm_m.Service.CategoryService;
@@ -18,4 +19,5 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> list() {
         return categoryMapper.getCategoryList();
     }
+
 }

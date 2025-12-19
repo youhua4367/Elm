@@ -12,15 +12,18 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Food implements Serializable {
+public class SetMealFood implements Serializable {
 
+    private Long id;
+    private Long setMealId;
     private Long foodId;
-    private String foodName;
-    private String foodExplain;
-    private String foodImg;
-    private BigDecimal foodPrice;
-    private Long businessId;
-    // 备注
-    private String remarks;
-    private Long categoryId;
+
+    // 菜品名称
+    private String name;
+
+    // 价格
+    private BigDecimal price;
+
+    // 份数
+    private Integer count;
 }
