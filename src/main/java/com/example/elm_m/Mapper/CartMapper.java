@@ -38,4 +38,6 @@ public interface CartMapper {
      */
     @Delete("delete from cart where cartId = #{cartId}")
     void deleteByCartId(Long cartId);
+
+    void insertBatch(List<Cart> cartList);
 }

@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.elm_m.Mapper.CartMapper">
+    <insert id="insertBatch">
+        insert into cart (foodId, businessId, userId, quantity, setmealId, flavor, img, name, amount)
+            values
+        <foreach collection="cartList" item="c" separator=",">
+            (
+                #{c.foodId},
+                #{c.businessId},
+                #{c.userId},
+                #{c.quantity},
+                #{c.setMealId},
+                #{c.flavor},
+                #{c.img},
+                #{c.name},
+                #{c.amount}
+            )
+        </foreach>
+    </insert>
 
     <select id="list" resultType="com.example.elm_m.Entity.Cart">
         select * from cart

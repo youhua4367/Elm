@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.elm_m.Mapper.OrdersMapper">
+    <insert id="insert" useGeneratedKeys="true" keyProperty="orderId">
+        insert into orders
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            userId,
+            businessId,
+            orderTime,
+            orderTotal,
+            addressId,
+            payStatus,
+            packAmount,
+            orderStatus,
+            number,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            #{userId},
+            #{businessId},
+            #{orderTime},
+            #{orderTotal},
+            #{addressId},
+            #{payStatus},
+            #{packAmount},
+            #{orderStatus},
+            #{number},
+        </trim>
+    </insert>
+    <update id="update">
+        update orders
+        <set>
+            <if test="orderStatus != null">
+                orderStatus = #{orderStatus},
+            </if>
+            <if test="cancelTime != null">
+                cancelTime = #{cancelTime},
+            </if>
+            <!-- 其他字段 -->
+        </set>
+        where orderId = #{orderId}
+    </update>
+</mapper>

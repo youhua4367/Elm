@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 @Data
 @AllArgsConstructor
@@ -16,5 +17,12 @@ public class OrderDetail implements Serializable {
     private Long odId;
     private Long orderId;
     private Long foodId;
+    private Long setMealId;
     private Integer quantity;
+
+    private String name;
+    private String img;
+    private BigDecimal amount;
+    private String flavor;
+    private Long businessId;
 }
