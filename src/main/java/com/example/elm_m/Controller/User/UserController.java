@@ -82,10 +82,10 @@ public class UserController {
      */
     @PostMapping("/register")
     @Operation(summary = "用户注册")
-    public Result<Void> register(@RequestBody UserRegisterDTO userRegisterDTO) {
+    public Result<String> register(@RequestBody UserRegisterDTO userRegisterDTO) {
         log.info("用户注册：{}", userRegisterDTO);
         userService.register(userRegisterDTO);
-        return Result.success();
+        return Result.success("注册成功!");
     }
 
     /**

@@ -6,4 +6,8 @@ import java.util.List;
 
 public interface BusinessService {
     List<Business> list();
+
+    List<Business> getByFoodType(Long typeId);
+
+    Business getByBusinessId(Long businessId);
 }

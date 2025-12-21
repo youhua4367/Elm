@@ -11,4 +11,10 @@ public interface BusinessMapper {
 
     @Select("select * from business")
     List<Business> getBusinessList();
+
+    @Select("select * from business where orderTypeId = #{typeId}")
+    List<Business> getByFoodType(Long typeId);
+
+    @Select("select * from business where businessId = #{businessId}")
+    Business getByBusinessId(Long businessId);
 }

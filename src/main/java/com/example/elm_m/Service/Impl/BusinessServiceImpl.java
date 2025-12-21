@@ -23,4 +23,24 @@ public class BusinessServiceImpl implements BusinessService {
 
         return businessMapper.getBusinessList();
     }
+
+    /**
+     * 特定类别的商家列表
+     * @param typeId 类别
+     * @return 商家列表
+     */
+    @Override
+    public List<Business> getByFoodType(Long typeId) {
+        return businessMapper.getByFoodType(typeId);
+    }
+
+    /**
+     * 获取商家
+     * @param businessId 商家id
+     * @return 商家
+     */
+    @Override
+    public Business getByBusinessId(Long businessId) {
+        return businessMapper.getByBusinessId(businessId);
+    }
 }
