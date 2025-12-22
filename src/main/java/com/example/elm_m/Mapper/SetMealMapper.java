@@ -7,5 +7,5 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface SetMealMapper {
     @Select("select * from setmeal where setmealId = #{setMealId}")
-    SetMeal getSetMealById(Long setMealId);
+    SetMeal getBySetMealById(Long setMealId);
 }

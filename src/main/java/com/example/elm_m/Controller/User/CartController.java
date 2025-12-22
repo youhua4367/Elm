@@ -62,7 +62,7 @@ public class CartController {
         return Result.success("购物车已清空");
     }
 
-    @DeleteMapping("/sub")
+    @PostMapping("/sub")
     @Operation(summary = "去除一项商品")
     public Result<String> sub(@RequestBody ShoppingCartDTO shoppingCartDTO) {
         log.info("删除商品:{}", shoppingCartDTO);

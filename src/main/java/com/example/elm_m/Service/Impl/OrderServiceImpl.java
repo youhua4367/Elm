@@ -91,8 +91,9 @@ public class OrderServiceImpl implements OrderService {
                 .id(orders.getOrderId())
                 .orderTime(orders.getOrderTime())
                 .orderNumber(orders.getNumber())
-                .orderAmount(orders.getOrderTotal())
+                .orderAmount(orders.getOrderTotal().add(orders.getPackAmount()))
                 .build();
+
     }
 
     /**

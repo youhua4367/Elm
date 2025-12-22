@@ -18,7 +18,7 @@ public interface CartMapper {
      * 更新商品的数量
      * @param cart1 购物车对象
      */
-    @Update("update cart set quantity = #{quantity} where cartId = #{cartId}")
+    @Update("update cart set quantity = #{quantity}, amount = #{amount} where cartId = #{cartId}")
     void updateQuantityById(Cart cart1);
 
     @Insert("insert into cart (foodId, businessId, userId, quantity, setmealId, flavor, img, name, amount) " +

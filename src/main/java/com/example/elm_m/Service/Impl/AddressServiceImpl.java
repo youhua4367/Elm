@@ -1,13 +1,19 @@
 package com.example.elm_m.Service.Impl;
 
+import com.example.elm_m.Constant.MessageConstant;
 import com.example.elm_m.Context.ThreadContext;
 import com.example.elm_m.Entity.Address;
+import com.example.elm_m.Entity.AddressResponse;
+import com.example.elm_m.Exception.ApiException;
 import com.example.elm_m.Mapper.AddressMapper;
+import com.example.elm_m.Properties.MapProperties;
 import com.example.elm_m.Service.AddressService;
+import com.example.elm_m.VO.AddressVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
@@ -17,6 +23,12 @@ public class AddressServiceImpl implements AddressService {
 
     @Autowired
     private AddressMapper addressMapper;
+
+    @Autowired
+    private RestTemplate restTemplate;
+
+    @Autowired
+    private MapProperties mapProperties;
 
     /**
      * 获取地址信息
@@ -42,8 +54,8 @@ public class AddressServiceImpl implements AddressService {
 
     /**
      * 根据 id 获得地址
-     * @param id
-     * @return
+     * @param id 地址id
+     * @return 地址
      */
     @Override
     public Address getById(Long id) {
@@ -52,7 +64,7 @@ public class AddressServiceImpl implements AddressService {
 
     /**
      * 修改地址
-     * @param address
+     * @param address 地址
      */
     @Override
     public void update(Address address) {
@@ -80,7 +92,7 @@ public class AddressServiceImpl implements AddressService {
 
     /**
      * 删除地址
-     * @param id
+     * @param id 地址id
      */
     @Override
     public void delete(Long id) {
@@ -98,6 +110,37 @@ public class AddressServiceImpl implements AddressService {
         address.setIsDefault(1);
 
         return addressMapper.getDefault(address);
+    }
+
+    /**
+     * 获取高德地图位置
+     * @return 位置
+     */
+    @Override
+    public AddressVO getAddress(String position) {
+
+        String key = mapProperties.getMapKey();
+
+        String url = "https://restapi.amap.com/v3/geocode/regeo"
+                + "?output=json"
+                + "&location=" + position
+                + "&key=" + key
+                + "&radius=100"
+                + "&extensions=base";
+
+        AddressResponse response =
+                restTemplate.getForObject(url, AddressResponse.class);
+
+        if (response != null && !response.getStatus().equals("1")) {
+            throw new ApiException(MessageConstant.API_ERROR);
+        }
+
+        if (response != null) {
+            return AddressVO.builder()
+                    .address(response.getRegeocode().getFormatted_address())
+                    .build();
+        }
+        return null;
     }
 
 

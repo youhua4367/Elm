@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -43,15 +44,25 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
         cart.setUserId(userId);
 
         List<Cart> cartList = cartMapper.list(cart);
+        // 查询食物的id
+        Long foodId = shoppingCartDTO.getFoodId();
         // 如果存在数量+1
         if (cartList != null && !cartList.isEmpty()) {
-            Cart cart1 = cartList.get(0);
-            cart1.setQuantity(cart1.getQuantity() + 1);
+            Cart cart1 = cartList.getFirst();
+            // 商品数量
+            Integer quantity = cart1.getQuantity();
+            cart1.setQuantity(quantity + 1);
+            if (cart1.getFoodId() != null) {
+                Food food = foodMapper.getFoodById(foodId);
+                cart1.setAmount(food.getFoodPrice().multiply(BigDecimal.valueOf(quantity+1)));
+            } else {
+                Long setMealId = shoppingCartDTO.getSetMealId();
+                SetMeal setMeal = setMealMapper.getBySetMealById(setMealId);
+                cart1.setAmount(setMeal.getPrice().multiply(BigDecimal.valueOf(quantity+1)));
+            }
             cartMapper.updateQuantityById(cart1);
         } else {
             // 如果不存在则插入
-
-            Long foodId = shoppingCartDTO.getFoodId();
             if (foodId != null) {
                 //菜品表
                 Food food = foodMapper.getFoodById(foodId);
@@ -62,7 +73,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             } else {
                 // 套餐表
                 Long setMealId = shoppingCartDTO.getSetMealId();
-                SetMeal setMeal = setMealMapper.getSetMealById(setMealId);
+                SetMeal setMeal = setMealMapper.getBySetMealById(setMealId);
                 cart.setSetMealId(setMeal.getSetMealId());
                 cart.setAmount(setMeal.getPrice());
                 cart.setImg(setMeal.getImg());
@@ -101,7 +112,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 
         List<Cart> cartList = cartMapper.list(cart);
         if (cartList != null && !cartList.isEmpty()) {
-            Cart cart1 = cartList.get(0);
+            Cart cart1 = cartList.getFirst();
             // 获取该商品的数量
             Integer quantity = cart1.getQuantity();
 
@@ -111,6 +122,15 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
             } else {
                 // 商品数量大于 1 , 则商品的数量减 1
                 cart1.setQuantity(quantity - 1);
+                Long foodId = cart1.getFoodId();
+                if (foodId != null) {
+                    Food food = foodMapper.getFoodById(foodId);
+                    cart1.setAmount(food.getFoodPrice().multiply(BigDecimal.valueOf(quantity-1)));
+                } else {
+                    Long setMealId = cart1.getSetMealId();
+                    SetMeal setMeal = setMealMapper.getBySetMealById(setMealId);
+                    cart1.setAmount(setMeal.getPrice().multiply(BigDecimal.valueOf(quantity-1)));
+                }
                 cartMapper.updateQuantityById(cart1);
             }
         }

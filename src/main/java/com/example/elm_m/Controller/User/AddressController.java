@@ -1,9 +1,11 @@
 package com.example.elm_m.Controller.User;
 
 import com.example.elm_m.Entity.Address;
+import com.example.elm_m.Entity.AddressResponse;
 import com.example.elm_m.Entity.Cart;
 import com.example.elm_m.Result.Result;
 import com.example.elm_m.Service.AddressService;
+import com.example.elm_m.VO.AddressVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -108,6 +110,19 @@ public class AddressController {
         log.info("查询默认地址");
 
         Address address = addressService.getDefault();
+        return Result.success(address);
+    }
+
+    /**
+     * 获取地理位置
+     * @return 地理位置
+     */
+    @GetMapping("/api/{position}")
+    @Operation(summary = "获取地理位置")
+    public Result<AddressVO> getAddress(@PathVariable String position) {
+        log.info("获取地理位置");
+
+        AddressVO address = addressService.getAddress(position);
         return Result.success(address);
     }
 }

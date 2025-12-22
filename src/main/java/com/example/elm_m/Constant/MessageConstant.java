@@ -17,4 +17,6 @@ public class MessageConstant {
 
     public static final String ORDER_NOT_FOUND = "订单不存在";
     public static final String ORDER_STATUS_ERROR = "订单状态错误";
+
+    public static final String API_ERROR = "API 调用错误";
 }
