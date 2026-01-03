@@ -5,6 +5,7 @@ import com.example.elm_m.DTO.UserRegisterDTO;
 import com.example.elm_m.DTO.UserLoginDTO;
 import com.example.elm_m.DTO.UserUpdateDTO;
 import com.example.elm_m.Entity.User;
+import com.example.elm_m.VO.UserAuthVO;
 import com.example.elm_m.VO.UserVO;
 
 public interface UserService {
@@ -17,4 +18,6 @@ public interface UserService {
     void update(String userId, UserUpdateDTO userUpdateDTO);
 
     void updatePassword(String userId, PasswordDTO passwordDTO);
+
+    UserAuthVO getAuthInfo();
 }

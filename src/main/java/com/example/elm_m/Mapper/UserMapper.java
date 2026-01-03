@@ -11,8 +11,8 @@ public interface UserMapper {
     @Select("select * from user where userId = #{userId}")
     User getByUserId(String userId);
 
-    @Insert("insert into user (userId, password, userName, userSex, userImg, delTag) " +
-            "values (#{userId}, #{password}, #{userName}, #{userSex}, #{userImg}, #{delTag})")
+    @Insert("insert into user (userId, password, userImg, delTag) " +
+            "values (#{userId}, #{password}, #{userImg}, #{delTag})")
     void insert(User user1);
 
 

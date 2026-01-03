@@ -14,4 +14,5 @@ public class UserLoginDTO implements Serializable {
 
     @Schema(description = "密码",example = "123456")
     private String password;
+
 }

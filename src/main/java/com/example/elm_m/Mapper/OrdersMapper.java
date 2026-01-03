@@ -1,9 +1,8 @@
 package com.example.elm_m.Mapper;
 
 import com.example.elm_m.Entity.Orders;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -20,4 +19,17 @@ public interface OrdersMapper {
     Orders getById(Long id);
 
     void update(Orders orders);
+
+    @Update("""
+    update orders
+    set payStatus = #{payStatus},
+        orderStatus = #{orderStatus}
+    where orderId = #{id}
+""")
+    void setStatus(
+            @Param("id") Long id,
+            @Param("payStatus") Integer payStatus,
+            @Param("orderStatus") Integer orderStatus
+    );
+
 }

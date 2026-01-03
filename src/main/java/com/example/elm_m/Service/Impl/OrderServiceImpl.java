@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -168,5 +167,14 @@ public class OrderServiceImpl implements OrderService {
                 }).toList();
 
         cartMapper.insertBatch(cartList);
+    }
+
+    /**
+     * 支付订单
+     * @param id 订单 id
+     */
+    @Override
+    public void payOrder(Long id) {
+        ordersMapper.setStatus(id, Orders.PAID, Orders.COMPLETED);
     }
 }

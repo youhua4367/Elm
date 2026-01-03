@@ -71,7 +71,7 @@ public class OrderController {
      */
     @PutMapping("/cancel/{id}")
     @Operation(summary = "取消订单")
-    public Result<String> cancelOrder(Long id) {
+    public Result<String> cancelOrder(@PathVariable Long id) {
         log.info("取消订单:{}", id);
 
         orderService.CancelById(id);
@@ -87,8 +87,20 @@ public class OrderController {
     @Operation(summary = "再来一单")
     public Result<String> repeatOne(@PathVariable Long id) {
         log.info("再来一单:{}", id);
-
+        System.out.println("当前订单id为："+ id);
         orderService.repeatOne(id);
         return Result.success("再来一单成功");
+    }
+
+    /**
+     * 支付订单
+     * @param id 订单id
+     * @return 成功标志
+     */
+    @PutMapping("/pay/{id}")
+    @Operation(summary = "支付订单")
+    public Result<String> payOrder(@PathVariable Long id) {
+        orderService.payOrder(id);
+        return Result.success("支付成功");
     }
 }

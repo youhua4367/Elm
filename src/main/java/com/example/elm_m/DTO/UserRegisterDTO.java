@@ -12,7 +12,11 @@ public class UserRegisterDTO implements Serializable {
     private String password;
     // 确认密码
     private String rePassword;
-    private String userName;
-    private Integer userSex;
+
+    @Schema(description = "验证码", example = "123456")
+    private String authInfo;
+
+    @Schema(description = "随机key")
+    private String authKey;
 
 }

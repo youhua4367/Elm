@@ -30,8 +30,6 @@ public class JwtTokenInterceptor implements HandlerInterceptor {
             // 拦截到的不是方法，放行
             return true;
         }
-
-
         // 请求头获取令牌
         String token = request.getHeader(jwtProperties.getUserTokenName());
         log.info("处理前的token:{}", token);

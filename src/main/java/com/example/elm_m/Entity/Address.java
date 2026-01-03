@@ -48,5 +48,4 @@ public class Address implements Serializable {
     // 是否默认，0为否，1为是
     private Integer isDefault;
 
-
 }

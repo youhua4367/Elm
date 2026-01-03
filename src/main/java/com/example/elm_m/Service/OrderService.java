@@ -17,4 +17,6 @@ public interface OrderService {
     void CancelById(Long id);
 
     void repeatOne(Long id);
+
+    void payOrder(Long id);
 }

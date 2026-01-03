@@ -15,4 +15,7 @@ public class UserUpdateDTO implements Serializable {
     @Schema(description = "性别",example = "1")
     private Integer userSex;
 
+    @Schema(description = "头像URL", example = "https://rein-aito.oss-cn-beijing.aliyuncs.com/xxx.jpg")
+    private String userImg;
+
 }

@@ -11,6 +11,7 @@ import com.example.elm_m.Properties.JwtProperties;
 import com.example.elm_m.Result.Result;
 import com.example.elm_m.Service.UserService;
 import com.example.elm_m.Utils.JwtUtil;
+import com.example.elm_m.VO.UserAuthVO;
 import com.example.elm_m.VO.UserLoginVO;
 import com.example.elm_m.VO.UserVO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -66,7 +67,7 @@ public class UserController {
 
     /**
      * 用户登出
-     * @return
+     * @return 登出
      */
     @PostMapping("/logout")
     @Operation(summary = "用户登出", description = "返回登出成功信息")
@@ -126,6 +127,15 @@ public class UserController {
         userService.updatePassword(userId, passwordDTO);
 
         return Result.success("修改密码成功");
+    }
+
+    @GetMapping("/auth")
+    @Operation(summary = "获取验证码", description = "用户获取验证码")
+    public Result<UserAuthVO> getAuthInfo() {
+        log.info("获取验证码");
+
+        UserAuthVO userAuthVO = userService.getAuthInfo();
+        return Result.success(userAuthVO);
     }
 
 }

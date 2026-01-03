@@ -19,4 +19,8 @@ public class MessageConstant {
     public static final String ORDER_STATUS_ERROR = "订单状态错误";
 
     public static final String API_ERROR = "API 调用错误";
+
+    public static final String AUTH = "auth:";
+    public static final String AUTH_ERROR = "验证码错误";
+    public static final String AUTH_TIMEOUT = "验证码已过期";
 }

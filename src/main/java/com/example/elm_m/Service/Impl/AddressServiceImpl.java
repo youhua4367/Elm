@@ -128,8 +128,7 @@ public class AddressServiceImpl implements AddressService {
                 + "&radius=100"
                 + "&extensions=base";
 
-        AddressResponse response =
-                restTemplate.getForObject(url, AddressResponse.class);
+        AddressResponse response = restTemplate.getForObject(url, AddressResponse.class);
 
         if (response != null && !response.getStatus().equals("1")) {
             throw new ApiException(MessageConstant.API_ERROR);

@@ -1,6 +1,7 @@
 package com.example.elm_m.Configuration;
 
 import com.example.elm_m.Interceptor.JwtTokenInterceptor;
+import com.example.elm_m.Interceptor.TimeInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     @Autowired
     private JwtTokenInterceptor jwtTokenInterceptor;
 
+    @Autowired
+    private TimeInterceptor timeInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         log.info("开始注册自定义拦截器...");
@@ -25,8 +29,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                         "/user/user/register",
                         "/swagger-ui/**",
                         "/v3/api-docs/**",
-                        "/user/business/**",
-                        "/user/category/**"
+                        "/user/user/auth"
                 );
+        registry.addInterceptor(timeInterceptor)
+                .addPathPatterns("/**");
     }
 }

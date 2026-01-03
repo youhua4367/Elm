@@ -2,7 +2,6 @@ package com.example.elm_m.Service.Impl;
 
 import com.example.elm_m.Constant.MessageConstant;
 import com.example.elm_m.Constant.StatusConstant;
-import com.example.elm_m.Context.ThreadContext;
 import com.example.elm_m.DTO.PasswordDTO;
 import com.example.elm_m.DTO.UserRegisterDTO;
 import com.example.elm_m.DTO.UserLoginDTO;
@@ -11,19 +10,28 @@ import com.example.elm_m.Entity.User;
 import com.example.elm_m.Exception.*;
 import com.example.elm_m.Mapper.UserMapper;
 import com.example.elm_m.Service.UserService;
+import com.example.elm_m.VO.UserAuthVO;
 import com.example.elm_m.VO.UserVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 用户登录
@@ -75,11 +83,28 @@ public class UserServiceImpl implements UserService {
                 throw new RuntimeException(e);
             }
         }
+        // 判断验证码
+        String authInfo = userRegisterDTO.getAuthInfo();
+        String authKey = userRegisterDTO.getAuthKey();
 
+        String redisKey = MessageConstant.AUTH + authKey;
+        String codeInRedis = (String) redisTemplate.opsForValue().get(redisKey);
+        log.info("验证码：{}", codeInRedis);
+
+        if (codeInRedis == null) {
+            throw new AuthErrorException(MessageConstant.AUTH_TIMEOUT);
+        }
+
+        if (!codeInRedis.equals(authInfo)) {
+            throw new AuthErrorException(MessageConstant.AUTH_ERROR);
+        }
+
+        redisTemplate.delete(redisKey);
+
+        // 判断密码
         String userId = userRegisterDTO.getUserId();
         String password = userRegisterDTO.getPassword();
         String rePassword = userRegisterDTO.getRePassword();
-
         // 判断密码是否满足要求（）
         if (userId.isEmpty() || password.isEmpty() || rePassword.isEmpty()) {
             throw new ParamException(MessageConstant.PARAM_ERROR);
@@ -119,7 +144,7 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 修改用户的信息
-     * @param userUpdateDTO
+     * @param userUpdateDTO 用户修改信息dto
      */
     @Override
     public void update(String userId, UserUpdateDTO userUpdateDTO) {
@@ -158,5 +183,26 @@ public class UserServiceImpl implements UserService {
         user1.setPassword(newPassword);
         userMapper.update(user1);
 
+    }
+
+    /**
+     * 用户获取验证码
+     * @return 验证码
+     */
+    @Override
+    public UserAuthVO getAuthInfo() {
+        StringBuilder code = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            code.append((int) (Math.random() * 10));
+        }
+        String authInfo = code.toString();
+        String key = UUID.randomUUID().toString();
+        redisTemplate.opsForValue().set(MessageConstant.AUTH + key, authInfo, 60, TimeUnit.SECONDS);
+
+
+        return UserAuthVO.builder()
+                .authInfo(authInfo)
+                .authKey(key)
+                .build();
     }
 }

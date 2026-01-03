@@ -49,7 +49,7 @@ public class Orders implements Serializable {
     // 打包费
     private BigDecimal packAmount;
 
-    // 订单状态
+    //订单状态订单状态 1待付款 2待接单 3已接单 4派送中 5已完成 6已取消 7退款
     private Integer orderStatus;
 
     // 送达时间
